@@ -6,7 +6,7 @@
 /*   By: tgeorgin <tgeorgin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:49:09 by tgeorgin          #+#    #+#             */
-/*   Updated: 2022/01/14 19:54:58 by tgeorgin         ###   ########.fr       */
+/*   Updated: 2022/01/20 14:40:31 by tgeorgin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ int	open_file(char *argv, int i)
 	int	file;
 
 	file = 0;
-	if (i == 0)
-		file = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	else if (i == 1)
+	if (i == 1)
 		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	else if (i == 2)
 		file = open(argv, O_RDONLY, 0777);
@@ -34,13 +32,13 @@ void	error(void)
 	exit(EXIT_FAILURE);
 }
 
-void arg_error(int err)
+void	arg_error(int err)
 {
 	ft_putstr("Trop d'arguments ! Ou pas assez...");
 	exit(0);
 }
 
-char	*find_path(char *cmd, char **envp)
+char	*path(char *cmd, char **envp)
 {
 	char	**paths;
 	char	*path;
@@ -61,14 +59,14 @@ char	*find_path(char *cmd, char **envp)
 			return (path);
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
-void	execute(char *argv, char **envp)
+void	exec(char *argv, char **envp)
 {
 	char	**cmd;
 
 	cmd = ft_split(argv, ' ');
-	if (execve(find_path(cmd[0], envp), cmd, envp) == -1)
+	if (execve(path(cmd[0], envp), cmd, envp) == -1)
 		error();
 }
