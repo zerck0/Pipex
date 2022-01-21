@@ -6,7 +6,7 @@
 #    By: tgeorgin <tgeorgin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/14 18:57:39 by tgeorgin          #+#    #+#              #
-#    Updated: 2022/01/20 13:48:58 by tgeorgin         ###   ########.fr        #
+#    Updated: 2022/01/21 16:45:25 by tgeorgin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,11 @@ SRC_FILES = pipex.c utils.c init.c
 OBJS = $(SRC_FILES:.c=.o)
 OBJS_F	= _objFiles/
 
-SRCS_B	= src/pipex_bonus.c src/utils.c src/utils_bonus.c
-OBJS_B	= ${SRCS_B:.c=.o}
+SRCS_BONUS		=	bonus/pipex_bonus.c \
+					bonus/utils_bonus.c \
+					bonus/init_bonus.c	\
+
+OBJS_BONUS	=	$(SRCS_BONUS:%.c=%.o)
 
 all: $(NAME)
 
@@ -45,21 +48,17 @@ $(NAME):
 					@gcc $(FLAGS) $(addprefix $(OBJS_F), $(OBJS)) $(LIBFT) -o $(NAME)
 					@echo "- Pipex Compiled -"
 
-bonus:		${OBJS_B}
-					@echo "     - Compiling Libft..."
-					@make re -C ./libft
-					@cp Libft/libft.a ./$(NAME)
-					@ar -rcs ${NAME} ${OBJS_B}
-					@$(CC) $(NAME) ${MAIN_B} -o ${PROG}
-					@echo "Pipex Bonus Compiled!\n"
+bonus:		$(OBJS_BONUS) $(LIBFT)
+			$(CC) $(OBJS_BONUS) $(LIBFT) $(CFLAGS) -o $(NAME)
 
 clean:
 					@make clean -C ./libft
 					@rm -rf $(OBJS_F)
-					@rm -f ${OBJS_F} ${OBJ_FILES}
+					@rm -f ${OBJS_BONUS} ${OBJS}
 
 fclean: 	clean
 					@make -C $(LIBF_DIR) fclean
 					@rm -f $(NAME)
+					@rm -f $()
 
 re:			fclean all

@@ -6,16 +6,65 @@
 /*   By: tgeorgin <tgeorgin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/20 14:48:08 by tgeorgin          #+#    #+#             */
-/*   Updated: 2022/01/20 15:53:32 by tgeorgin         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:08:35 by tgeorgin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../src/pipex.h"
 
-void	error(void)
+void	error(char *s, char *argv)
 {
-	perror("\033[31mError: ");
-	exit(EXIT_FAILURE);
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd(argv, 2);
+	ft_putstr_fd("\n", 2);
+	exit(1);
+}
+
+void	arg_error(int err)
+{
+	ft_putstr("Pas assez d'arguments ! ");
+	exit(0);
+}
+
+char	*path(char *cmd, char **envp)
+{
+	char	**paths;
+	char	*path;
+	int		i;
+	char	*part_path;
+
+	i = 0;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+		i++;
+	paths = ft_split(envp[i] + 5, ':');
+	i = 0;
+	while (paths[i])
+	{
+		part_path = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(part_path, cmd);
+		free(part_path);
+		if (access(path, F_OK) == 0)
+		{
+			free_tab(paths);
+			return (path);
+		}
+		i++;
+	}
+	free_tab(paths);
+	return (0);
+}
+
+void	exec(char *argv, char **envp)
+{
+	char	**cmd;
+
+	cmd = ft_split(argv, ' ');
+	if (execve(path(cmd[0], envp), cmd, envp) == -1)
+	{
+		free_tab(cmd);
+		error("command not found : ", argv);
+	}
+	free_tab(cmd);
 }
 
 int	open_file(char *argv, int i)
@@ -23,13 +72,11 @@ int	open_file(char *argv, int i)
 	int	file;
 
 	file = 0;
-	if (i == 0)
-		file = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	else if (i == 1)
+	if (i == 1)
 		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	else if (i == 2)
 		file = open(argv, O_RDONLY, 0777);
 	if (file == -1)
-		error();
+		error("Error with open or file does not exist", "");
 	return (file);
 }

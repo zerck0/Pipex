@@ -12,6 +12,17 @@
 
 #include "pipex.h"
 
+void	*free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
+	return (NULL);
+}
+
 void	parent_process(char **argv, char **envp, t_ppx *pip)
 {
 	int		fileout;
@@ -45,10 +56,10 @@ int	main(int argc, char **argv, char **envp)
 	{
 		init_pipex(pip, argc, argv, envp);
 		if (pipe(pip.p) == -1)
-			error();
+			error("error with pipe", "");
 		pid1 = fork();
 		if (pid1 == -1)
-			error();
+			error("error with Fork", "");
 		if (pid1 == 0)
 			child_process(argv, envp, &pip);
 		waitpid(pid1, NULL, 0);

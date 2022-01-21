@@ -6,7 +6,7 @@
 /*   By: tgeorgin <tgeorgin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:31:16 by tgeorgin          #+#    #+#             */
-/*   Updated: 2022/01/20 14:40:28 by tgeorgin         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:53:07 by tgeorgin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ typedef struct pipex
 
 int		open_file(char *argv, int i);
 void	exec(char *argv, char **envp);
+void	*free_tab(char **tab);
 void	arg_error(int err);
 void	init_pipex(t_ppx pipex, int ac, char **av, char **envp);
-void	error(void);
+void	error(char *s, char *argv);
 char	*path(char *cmd, char **envp);
 
 #endif

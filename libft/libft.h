@@ -6,7 +6,7 @@
 /*   By: tgeorgin <tgeorgin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 19:28:37 by tgeorgin          #+#    #+#             */
-/*   Updated: 2022/01/04 21:35:17 by tgeorgin         ###   ########.fr       */
+/*   Updated: 2022/01/21 16:02:53 by tgeorgin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include "ft_printf/include/ft_printf.h"
 
 typedef struct s_list
 {
